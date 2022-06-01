@@ -73,6 +73,7 @@ public class SpringMockmvcInjectJsonXmlApplicationTests {
 
         mockMvc.perform(post("/createPerson")
                         .contentType(MediaType.APPLICATION_XML)  // ok
+                        //.contentType(MediaType.APPLICATION_XML_VALUE)  // injection doesn't work in this case
                         //.contentType("application/xml") // injection doesn't work in this case
                         //.content(xml.getBytes(StandardCharsets.UTF_8))  // injection doesn't work in this case
                         // .content(xml)  // no injection to 'xml' variable value
