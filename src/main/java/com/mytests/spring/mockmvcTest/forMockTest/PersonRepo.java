@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * *
  * <p>Created by irina on 10/20/2021.</p>
- * <p>Project: spring-jsonpath-test0</p>
+ * <p>Project: spring-mockmvc-inject-json-xml</p>
  * *
  */
 @Repository

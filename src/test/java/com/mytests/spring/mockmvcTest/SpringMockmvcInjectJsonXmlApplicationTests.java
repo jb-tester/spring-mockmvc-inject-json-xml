@@ -13,6 +13,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.nio.charset.StandardCharsets;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -42,7 +44,8 @@ public class SpringMockmvcInjectJsonXmlApplicationTests {
         when(service.savePerson(any(Person.class))).thenReturn("200");
 
         mockMvc.perform(post("/createPerson")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON) // ok
+                        //.contentType(MediaType.APPLICATION_JSON_VALUE) // injection doesn't work in this case
                         //.contentType("application/json")   // injection doesn't work in this case
                         .content("{\n" +
                                 "  \"name\": \"masha\",\n" +
@@ -53,7 +56,7 @@ public class SpringMockmvcInjectJsonXmlApplicationTests {
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(header().string("pid", "/person/200"))
-                .andExpect(content().json("{ \"id\": \"200\",\"name\": \"masha\", \"familyName\": \"ivanova\", \"age\": 25 }"))
+                .andExpect(content().json("{ \"id\": \"200\",\"name\": \"masha\", \"familyName\": \"ivanova\", \"age\": 25 }", true))
                 .andExpect(jsonPath("$.id").value("200"))
                 .andExpect(jsonPath("$.name").value("masha"))
                 .andExpect(jsonPath("$.familyName").value("ivanova"))
@@ -61,19 +64,23 @@ public class SpringMockmvcInjectJsonXmlApplicationTests {
     }
     @Test
     public void shouldCreatePersonXML() throws Exception {
-
-        when(service.savePerson(any(Person.class))).thenReturn("100");
-
         String xml = "<person>\n" +
                 "    <name>vasya</name>\n" +
                 "    <familyName>petrov</familyName>\n" +
                 "    <age>25</age>\n" +
                 "</person>";
+        when(service.savePerson(any(Person.class))).thenReturn("100");
+
         mockMvc.perform(post("/createPerson")
-                        .contentType(MediaType.APPLICATION_XML)
+                        .contentType(MediaType.APPLICATION_XML)  // ok
                         //.contentType("application/xml") // injection doesn't work in this case
                         //.content(xml.getBytes(StandardCharsets.UTF_8))  // injection doesn't work in this case
-                        .content(xml)
+                        // .content(xml)  // no injection to 'xml' variable value
+                        .content("<person>\n" +
+                                "    <name>vasya</name>\n" +
+                                "    <familyName>petrov</familyName>\n" +
+                                "    <age>25</age>\n" +
+                                "</person>")
                         .accept(MediaType.APPLICATION_XML))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/xml;charset=UTF-8"))

@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * *
  * <p>Created by irina on 10/20/2021.</p>
- * <p>Project: spring-jsonpath-test0</p>
+ * <p>Project: spring-mockmvc-inject-json-xml</p>
  * *
  */
 @XmlRootElement
@@ -39,7 +39,8 @@ public class Person {
     public void setId(String id) {
         this.id = id;
     }
-@XmlElement
+
+    @XmlElement
     public String getName() {
         return name;
     }
@@ -47,6 +48,7 @@ public class Person {
     public void setName(String name) {
         this.name = name;
     }
+
     @XmlElement
     public String getFamilyName() {
         return familyName;
@@ -55,6 +57,7 @@ public class Person {
     public void setFamilyName(String familyName) {
         this.familyName = familyName;
     }
+
     @XmlElement
     public int getAge() {
         return age;
